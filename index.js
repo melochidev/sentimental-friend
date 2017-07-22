@@ -101,6 +101,8 @@ restService.post('/reply', function(req, res) {
   var location = req.body.result.parameters["geo-country"]; 
   var password = req.body.result.parameters.password;
   var text = "I don't know what to say.";
+  var shortText = "";
+  var tooLong = false;
   
   //console.log("calling webhook.");
       //ROUTING OF ACTIONS
@@ -387,6 +389,13 @@ restService.post('/reply', function(req, res) {
 
       case "get.rest":
         text = "If you're tired, I know just the thing to help you get the rest you deserve. Just follow my lead. " + sleepBreathe();
+        shortText = "I recommend doing the 4-7-8 breathing exercise to help relax and lull yourself to sleep. "
+            + "To start, place the tip of your tongue on the roof of your mouth, right behind your front teeth. "
+            + "Then close your mouth and inhale through your nose for four seconds. "
+            + "Hold your breath for a count of seven. "
+            + "Finally, make a woosh sound as you exhale through your mouth, for a count of eight. "
+            + "Repeat this 3 more times. ";
+        tooLong = true;
         break;
 
       case "relax.repeat":
@@ -425,11 +434,19 @@ restService.post('/reply', function(req, res) {
     previousAction = action;
 
     console.log(text);
+    if (tooLong) {
+      return res.json({
+      speech: '<speak> ' + text + ' </speak>',
+      displayText: shortText,
+      source: "natlangtst2"
+    }); 
+    } else {
     return res.json({
       speech: '<speak> ' + text + ' </speak>',
       displayText: text,
       source: "natlangtst2"
     }); 
+    }
 });
 
 restService.listen((process.env.PORT || 8080), function() {
