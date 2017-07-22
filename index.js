@@ -404,6 +404,10 @@ restService.post('/reply', function(req, res) {
       
       case "getrest.repeat":
         text = sleepBreatheRepeat();
+        shortText = "Close your mouth and inhale through your nose for four seconds. "
+            + "Hold your breath for a count of seven. "
+            + "Finally, make a woosh sound as you exhale through your mouth, for a count of eight. "
+        tooLong = true;
         break; 
               
       case "do.good": 
