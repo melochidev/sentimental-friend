@@ -11,9 +11,9 @@ admin.initializeApp({
     databaseURL: "https://emotional-response.firebaseio.com/"
 });
 
-// var fourSeconds = '<audio src="https://firebasestorage.googleapis.com/v0/b/emotional-response.appspot.com/o/4sec_relax.ogg?alt=media&amp;token=f9b14a81-b53b-45d5-b184-c98047fbeb97"></audio>';
-// var sevenSeconds = ' <audio src="https://firebasestorage.googleapis.com/v0/b/emotional-response.appspot.com/o/7sec_relax.ogg?alt=media&amp;token=1f999c46-ba8c-4495-9b01-dc1e51c2493b"></audio> ';
-// var eightSeconds = ' <audio src="https://firebasestorage.googleapis.com/v0/b/emotional-response.appspot.com/o/8sec_relax.ogg?alt=media&amp;token=e51490cd-446e-4c4f-8f3c-b60db302829f"></audio> ';
+var fourSeconds = '<audio src="https://firebasestorage.googleapis.com/v0/b/emotional-response.appspot.com/o/4sec_relax.ogg?alt=media&amp;token=f9b14a81-b53b-45d5-b184-c98047fbeb97"></audio>';
+var sevenSeconds = ' <audio src="https://firebasestorage.googleapis.com/v0/b/emotional-response.appspot.com/o/7sec_relax.ogg?alt=media&amp;token=1f999c46-ba8c-4495-9b01-dc1e51c2493b"></audio> ';
+var eightSeconds = ' <audio src="https://firebasestorage.googleapis.com/v0/b/emotional-response.appspot.com/o/8sec_relax.ogg?alt=media&amp;token=e51490cd-446e-4c4f-8f3c-b60db302829f"></audio> ';
 
 var count = 0;
 var depressed = false;
@@ -386,7 +386,7 @@ restService.post('/reply', function(req, res) {
         break;
 
       case "get.rest":
-        text = "If you're tired, I know just the thing to help you get the rest you deserve. Just follow my lead. " + relax();
+        text = "If you're tired, I know just the thing to help you get the rest you deserve. Just follow my lead. " + sleepBreathe();
         break;
 
       case "relax.repeat":
@@ -459,6 +459,22 @@ function relaxRepeat() {
   return audio;
 }
 
+function sleepBreathe() {
+  var warning = 'But if you don\'t feel comfortable with these exact instructions, no problem! Just do what is comfortable for you. <break time="1s"/> '
+  var start = 'Now start by placing the tip of your tongue on the roof of your mouth, right behind your front teeth. <break time="1s"/> '
+  var steps = 'Close your mouth and inhale through your nose for four seconds. '
+    + fourSeconds;
+    + 'Hold your breath for a count of seven. ' 
+    + sevenSeconds;
+    + 'Make a woosh sound as you exhale through your mouth, for a count of eight. '
+    + eightSeconds;
+  var total = warning + start + steps;
+
+  total += "To keep going, just say 'repeat'";
+
+  return total;
+}
+
 function doGood() {
   var index = Math.floor(Math.random() * goodDeeds.length);
   return goodDeeds[index];
@@ -468,6 +484,3 @@ function tellJokes() {
   var index = Math.floor(Math.random() * jokes.length);
   return jokes[index];
 }
-
-
-
