@@ -139,7 +139,7 @@ restService.post('/reply', function(req, res) {
         } else if (previousAction == "de.stress") {
           action = "relax.repeat";
         } else if (previousAction == "get.rest") {
-          action = "relax.repeat";
+          action = "getrest.repeat";
         } else if (previousAction == "relax.repeat") {
           action = "relax.repeat";
         }
@@ -393,6 +393,10 @@ restService.post('/reply', function(req, res) {
         text = relaxRepeat();
         break;
       
+      case "getrest.repeat":
+        text = sleepBreatheRepeat();
+        break; 
+              
       case "do.good": 
         text = "You could " + doGood(); 
         break;
@@ -463,16 +467,27 @@ function sleepBreathe() {
   var warning = 'But if you don\'t feel comfortable with these exact instructions, no problem! Just do what is comfortable for you. <break time="1s"/> '
   var start = 'Now start by placing the tip of your tongue on the roof of your mouth, right behind your front teeth. <break time="1s"/> '
   var steps = 'Close your mouth and inhale through your nose for four seconds. '
-    + fourSeconds;
+    + fourSeconds
     + 'Hold your breath for a count of seven. ' 
-    + sevenSeconds;
+    + sevenSeconds
     + 'Make a woosh sound as you exhale through your mouth, for a count of eight. '
-    + eightSeconds;
+    + eightSeconds
   var total = warning + start + steps;
 
   total += "To keep going, just say 'repeat'";
 
   return total;
+}
+
+function sleepBreatheRepeat() {
+    var steps = 'Close your mouth and inhale through your nose. '
+    + fourSeconds
+    + 'Hold your breath. ' 
+    + sevenSeconds
+    + 'Make a woosh sound as you exhale through your mouth. '
+    + eightSeconds
+    
+    return steps;
 }
 
 function doGood() {
