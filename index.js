@@ -151,7 +151,7 @@ restService.post('/reply', function(req, res) {
           action = "relax.repeat";
         } else if (previousAction == "de.stress") {
           action = "relax.repeat";
-        } else if (previousAction == "get.rest") {
+        } else if (previousAction == "get.rest" || previousAction == getrest.repeat) {
           action = "getrest.repeat";
         } else if (previousAction == "relax.repeat") {
           action = "relax.repeat";
@@ -314,7 +314,8 @@ restService.post('/reply', function(req, res) {
         text = survey[depCount];
 
         if (req.body.result.parameters.yesno == "no" && depCount == 1) {
-          text = "No problem, I understand if it's something you don't feel like talking about. Maybe try some jokes or relaxation instead"
+          text = "No problem, I understand if it's something you don't feel like talking about. Maybe try some jokes or relaxation instead";
+          depCount = 0;
           break;
         } else if (req.body.result.parameters.yesno == "no" && depCount == 7) {
           text = "That's all I can think of at the moment... I'm sorry I couldn't help you directly, but whatever is making you feel down, I hope things get better soon. "
@@ -380,6 +381,14 @@ restService.post('/reply', function(req, res) {
         break;
 
       case "calm.down": 
+        // text = "Oh no, it sounds like something really unfortunate happened to you if you're feeling that angry. I'm sorry to hear that. " 
+        // + "I can help you relax if you want to take your mind off of the things that are bothering you. Just say 'relax'.";
+        // break;
+        // if (madCount == 1) {
+        //   if (req.body.result.parameters.yesno == "no") { 
+
+        //   }
+        // }
         text = "I understand that you're feeling upset. Let's try and talk about it... <break time=\"1s\"/> are you mad at someone else, yourself, or something else?";
         
         if (target == "someone else") {
