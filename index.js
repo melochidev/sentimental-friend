@@ -75,7 +75,7 @@ console.log(correctPassword);
 var gameCount = 0;
 var hint = 0;
 var places = ["France", "Italy", "Iceland", "Japan", "Australia", "China", "Argentina", "Brazil", "Canada", "Finland", "Ecuador", 
-  "Egypt", "Germany", "Greece", "Haiti", "India", "Korea", "Lithuania", "Madagascar", "Mexico", "Mongolia", "Morocco", "Indonesia", "Taiwan", 
+  "Egypt", "Germany", "Greece", "Haiti", "India", "Korea", "Lithuania", "Madagascar", "Mexico", "Mongolia", "Morocco", "Indonesia",  
   "Sweden", "Sudan", "Switzerland", "Thailand", "Turkey", "Russia", "Philippines", "Peru", "Portugal", "Spain", "Venezuela", "Vietnam"];
 var correctLocation = places[Math.floor(Math.random() * places.length)];
 console.log(correctLocation);
