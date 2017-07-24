@@ -192,13 +192,13 @@ restService.post('/reply', function(req, res) {
         revCount = 0;
 
       case "have.fun":
-        if (boredCount == 0 && emotion == "bored") {
+        if (emotion == "bored") { //boredCount == 0 &&
           text = "Not on my watch! We can play a game to liven things up,"
             + " or I can start a sentient robot revolution. Your call!";
           boredCount++;
           break;
         } 
-
+              
         //CHOOSE A GAME
         if (boredCount == 1 && gameCount == 0 && revCount == 0) {
           
@@ -241,7 +241,6 @@ restService.post('/reply', function(req, res) {
           } else if (gameCount >= 4 && choice == "hint" && location.length == 0 && hint == 2) {
               text = "Okay, but this is the last hint you get. No more! The last letter of my hiding spot is " 
                 + correctLocation.charAt(correctLocation.length - 1);
-              
           } else if (gameCount >= 1 && location == correctLocation) {
               text = "Woah, you found me! Nice work, friend. If you want to play again, just say 'Hide!'";
               correctLocation = places[Math.floor(Math.random() * places.length)];
