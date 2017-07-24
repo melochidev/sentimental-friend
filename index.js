@@ -244,6 +244,7 @@ restService.post('/reply', function(req, res) {
               
           } else if (gameCount >= 1 && location == correctLocation) {
               text = "Woah, you found me! Nice work, friend. If you want to play again, just say 'Hide!'";
+              correctLocation = places[Math.floor(Math.random() * places.length)];
               boredCount = 0;
               gameCount = 0;
           } else if (gameCount > 1) {
