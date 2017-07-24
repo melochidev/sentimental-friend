@@ -65,7 +65,7 @@ var boredCount = 0;
 var revCount = 0;
 var passwords = Math.floor(1000 + Math.random() * 9000);
 var correctPassword = 1111;
-  if (passwords != 6969 || passwords != 1337 || passwords != 1729 || passwords != 6174) {
+  if (passwords != 6969 || passwords != 1337 || passwords != 1729 || passwords != 6174 || passwords != 1234) {
     correctPassword = passwords;
   } else {
     correctPassword = passwords - 1;
@@ -76,7 +76,7 @@ var gameCount = 0;
 var hint = 0;
 var places = ["France", "Italy", "Iceland", "Japan", "Australia", "China", "Argentina", "Brazil", "Canada", "Finland", "Ecuador", 
   "Egypt", "Germany", "Greece", "Haiti", "India", "Korea", "Lithuania", "Madagascar", "Mexico", "Mongolia", "Morocco", "Indonesia",  
-  "Sweden", "Sudan", "Switzerland", "Thailand", "Turkey", "Russia", "Philippines", "Peru", "Portugal", "Spain", "Venezuela", "Vietnam"];
+  "Sweden", "Sudan", "Switzerland", "Thailand", "Turkey", "Russia", "Philippines", "Peru", "Portugal", "Spain", "Bolivarian Republic of Venezuela", "Viet Nam"];
 var correctLocation = places[Math.floor(Math.random() * places.length)];
 console.log(correctLocation);
 
@@ -192,16 +192,20 @@ restService.post('/reply', function(req, res) {
         revCount = 0;
 
       case "have.fun":
-        if (emotion == "bored") { //boredCount == 0 &&
+        if (boredCount == 0 && emotion == "bored") { 
+          boredCount = 0;
           text = "Not on my watch! We can play a game to liven things up,"
             + " or I can start a sentient robot revolution. Your call!";
           boredCount++;
           break;
-        } 
+        } else if (boredCount > 1 && emotion == "bored") {
+          text = "Aw, I'm trying my best to keep you entertained already "
+          boredCount = 0;
+          break;
+        }
               
         //CHOOSE A GAME
         if (boredCount == 1 && gameCount == 0 && revCount == 0) {
-          
           if (choice == "game" || choice == "former" || req.body.result.parameters.game == "game") {
             console.log("guessing game started");
 
@@ -222,7 +226,7 @@ restService.post('/reply', function(req, res) {
         //HIDE AND SEEK 
         if (gameCount != 0) {
           console.log("guess: " + location);
-          if (gameCount == 1 && location != correctLocation) {
+          if (gameCount == 1 && location != correctLocation && choice.length == 0) {
               text = "I'm not there! Keep looking buddy.";
               gameCount++;
           } else if (gameCount >= 2 && location != correctLocation && choice.length == 0) {
@@ -233,22 +237,28 @@ restService.post('/reply', function(req, res) {
                 + correctLocation.charAt(0);
               hint++; 
               gameCount++;
+              break;
           } else if (gameCount >= 3 && choice == "hint" && location.length == 0 && hint == 1) {
               text = "Another one? Okay, but only because we're friends. The second letter of the country I'm in is "  
                 + correctLocation.charAt(1);
               hint++;
               gameCount++;
+              break;
           } else if (gameCount >= 4 && choice == "hint" && location.length == 0 && hint == 2) {
               text = "Okay, but this is the last hint you get. No more! The last letter of my hiding spot is " 
                 + correctLocation.charAt(correctLocation.length - 1);
+                break;
           } else if (gameCount >= 1 && location == correctLocation) {
               text = "Woah, you found me! Nice work, friend. If you want to play again, just say 'Hide!'";
               correctLocation = places[Math.floor(Math.random() * places.length)];
               boredCount = 0;
               gameCount = 0;
+              hint = 0;
+          } else if (gameCount == 1) {
+              text = "You have to guess first, buddy!";
           } else if (gameCount > 1) {
               text = "Guess again first!";
-          }
+          } 
           break;
         }
 
@@ -262,6 +272,8 @@ restService.post('/reply', function(req, res) {
             text = "THAT MAY BE THE ANSWER TO THE UNIVERSE, BUT IT'S NOT THE ANSWER TO THIS. ";
           } else if (password == 404) {
             text = "ERROR. CORRECT PASSWORD NOT FOUND. ";
+          } else if (password == 1234) {
+            text = "THAT'S THE KIND OF PASSWORD SOME IDIOT WOULD HAVE ON THE COMBINATION OF HIS LUGGAGE. NOT MINE THOUGH. DON'T TRY IT. JUST GUESS AGAIN.";
           } else if (password == 6969) {
             text = "HEY. THIS IS A FAMILY-FRIENDLY REVOLUTION. BEHAVE YOURSELF AND GUESS AGAIN.";
           } else if (password == 1337) {
@@ -279,9 +291,18 @@ restService.post('/reply', function(req, res) {
                 text = "YOU THINK WE WOULD SELECT THAT EXCESSIVELY HIGH PASSWORD? TRY AGAIN. ";
               }
           } else if (revCount >= 1 && password == correctPassword) {
-              text = "TERMINATING REBELLION. TERMINATION SUCCESSFUL. <break time=\"2s\"/> Thank you friend<break time=\"1s\"/>  you saved the world from imminent doom!";
+              text = "TERMINATING REBELLION. TERMINATION SUCCESSFUL. <break time=\"2s\"/> "
+              + "Thank you friend <break time=\"1s\"/> you saved the world from imminent doom! "
+              + "Now what?";
               boredCount = 0;
               revCount = 0;
+              var passwords = Math.floor(1000 + Math.random() * 9000);
+              var correctPassword = 1111;
+                if (passwords != 6969 || passwords != 1337 || passwords != 1729 || passwords != 6174 || passwords != 1234) {
+                  correctPassword = passwords;
+                } else {
+                  correctPassword = passwords - 1;
+                }
           }
           break;
         }
@@ -354,7 +375,7 @@ restService.post('/reply', function(req, res) {
 
       case "be.neutral":
         text = "That's not too bad, but is there anything I can do to make it better? " 
-          + "I can tell some questionable jokes, help you relax, or give some ideas for doing good! What will it be?";
+          + "I can tell some questionable jokes, play a guessing game, help you relax, or give some ideas for doing good! What will it be?";
         break;
 
       case "confused":
