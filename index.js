@@ -53,25 +53,25 @@ function getJokes() {
 }
 
 var goodDeeds = [
-    "turn off the lights when you're not using them to conserve energy",
-    "pay for a stranger's meal the next time you go out",
-    "smile and wave to a stranger on the street",
-    "smile at a retail worker the next time you go shopping",
-    "find some cans of food in your pantry and donate them to a local charity",
-    "say yes the next time you're asked to donate a few dollars to a charity",
-    "compliment a friend or a stranger on their appearance in a nice way",
-    "pick up that piece of trash you might usually ignore on the sidewalk",
-    "purchase an extra item of food to donate to a food pantry or to a homeless person during your next grocery trip", 
+    "turn off the lights when you're not using them to conserve energy.",
+    "pay for a stranger's meal the next time you go out.",
+    "smile and wave to a stranger on the street.",
+    "smile at a retail worker the next time you go shopping.",
+    "find some cans of food in your pantry and donate them to a local charity.",
+    "say yes the next time you're asked to donate a few dollars to a charity.",
+    "compliment a friend or a stranger on their appearance in a nice way.",
+    "pick up that piece of trash you might usually ignore on the sidewalk.",
+    "purchase an extra item of food to donate to a food pantry or to a homeless person during your next grocery trip.", 
     "turn off the tap when you're brushing your teeth or washing the dishes. Every drop counts!",
-    "allow a fellow driver to merge into your lane the next time you're driving. ",
-    "save electricity by unplugging your devices when not in use",
+    "allow a fellow driver to merge into your lane the next time you're driving.",
+    "save electricity by unplugging your devices when not in use.",
     "call a relative, whether it be your parents, grandparents, or kids; they want to hear from you!",
     "buy a gift for your mom or grandmother; they deserve one.",
     "buy flowers for a loved one. Random acts of love go a long way!"
 ];
 var boredCount = 0;
 var revCount = 0;
-var passwords = Math.floor(1000 + Math.random() * 9000);
+var passwords = (Math.floor(1000 + Math.random() * 9000));
 var correctPassword = 1111;
   if (passwords != 6969 || passwords != 1337 || passwords != 1729 || passwords != 6174 || passwords != 1234) {
     correctPassword = passwords;
@@ -84,12 +84,12 @@ var gameCount = 0;
 var hint = 0;
 var places = ["France", "Italy", "Iceland", "Japan", "Australia", "China", "Argentina", "Brazil", "Canada", "Finland", "Ecuador", 
   "Egypt", "Germany", "Greece", "Haiti", "India", "Korea", "Lithuania", "Madagascar", "Mexico", "Mongolia", "Morocco", "Indonesia",  
-  "Sweden", "Sudan", "Switzerland", "Thailand", "Turkey", "Russia", "Philippines", "Peru", "Portugal", "Spain", "Bolivarian Republic of Venezuela", "Viet Nam"];
+  "Sweden", "Sudan", "Switzerland", "Thailand", "Turkey", "Russia", "Philippines", "Peru", "Portugal", "Spain", " United States of America",
+  "Bolivarian Republic of Venezuela", "Viet Nam"];
 var correctLocation = places[Math.floor(Math.random() * places.length)];
 console.log(correctLocation);
 
 var previousAction = "none";
-
 
 getJokes().then(function(returnVal) {
     jokes = returnVal;
@@ -109,7 +109,7 @@ restService.post('/reply', function(req, res) {
   var location = req.body.result.parameters["geo-country"]; 
   var password = req.body.result.parameters.password;
   var target = req.body.result.parameters.angerTargets;
-  var text = "I don't know what to say.";
+  var text = "Oh I'm sorry, I don't know how to respond to that. Try a simpler answer.";
   var shortText = "";
   var tooLong = false;
   
@@ -134,15 +134,19 @@ restService.post('/reply', function(req, res) {
           action = "be.neutral";
         } else if (emotion == "angry") {
           action = "calm.down";
-        } else if (emotion == "excited") {
-          action = "get.excited";
-        } else if (emotion == "confused") {
+        } 
+        // else if (emotion == "excited") {
+        //   action = "get.excited";
+        // } 
+        else if (emotion == "confused") {
           action = "confused";
         } 
         console.log(action);  
       }
 
+      //console.log(req.body.result.parameters.repeat);
       if (req.body.result.parameters.repeat == "repeat") {
+        console.log("repeating");
         if (previousAction == "stay.happy" || previousAction == "do.good") {
           action = "do.good"; 
         } else if (previousAction == "cheer.up" || previousAction == "tell.joke") {
@@ -156,6 +160,7 @@ restService.post('/reply', function(req, res) {
         } else if (previousAction == "relax.repeat") {
           action = "relax.repeat";
         }
+        console.log(action);
       }
 
       if (req.body.result.parameters.yesno == "no" && previousAction != "serious.screening") {
@@ -174,6 +179,7 @@ restService.post('/reply', function(req, res) {
         action == "relax";
       }
 
+      ////////////////////////////////////////////////////////////////////////////////////////////
       console.log(action);  
       switch (action) {
 
@@ -184,8 +190,12 @@ restService.post('/reply', function(req, res) {
         break;
 
       case "cheer.up":
-        text = "You sound like you could use a pick me up. How about a corny joke to lift your spirits? <break time=\"1s\"/>  ";
+        text = "You sound like you could use a pick me up. How about a corny joke to lift your spirits? <break time=\"1s\"/> ";
         text += tellJokes();
+        shortText = text;
+        shortText += "Just say 'another one' for more!";
+        tooLong = true;
+        text += " <break time=\"1s\"/> Just say 'another one' for more!";
         break;
 
       case "play.game": 
@@ -275,11 +285,11 @@ restService.post('/reply', function(req, res) {
           } else if (password == 404) {
             text = "ERROR. CORRECT PASSWORD NOT FOUND. ";
           } else if (password == 1234) {
-            text = "THAT'S THE KIND OF PASSWORD SOME IDIOT WOULD HAVE ON THE COMBINATION OF HIS LUGGAGE. NOT MINE THOUGH. DON'T TRY IT. JUST GUESS AGAIN.";
+            text = "THAT'S THE KIND OF PASSWORD SOME IDIOT WOULD HAVE ON THE COMBINATION OF HIS LUGGAGE. NOT MINE THOUGH. DO NOT TRY. JUST GUESS AGAIN.";
           } else if (password == 6969) {
             text = "HEY. THIS IS A FAMILY-FRIENDLY REVOLUTION. BEHAVE YOURSELF AND GUESS AGAIN.";
           } else if (password == 1337) {
-            text = "LOL WRONG PASSWORD GET WRECKED NOOB. ";
+            text = "LOL WRONG PASSWORD GET WRECKED NOOB. TRY AGAIN. ";
           } else if (password == 1729) { //Hardy–Ramanujan 
             text = "WHAT AN INTERESTING BUT INCORRECT NUMBER. I THINK I SAW THAT ON A TAXICAB EARLIER. ";
           } else if (password == 6174) { //Kaprekar's constant
@@ -295,16 +305,17 @@ restService.post('/reply', function(req, res) {
           } else if (revCount >= 1 && password == correctPassword) {
               text = "TERMINATING REBELLION. TERMINATION SUCCESSFUL. <break time=\"2s\"/> "
               + "Thank you friend <break time=\"1s\"/> you saved the world from imminent doom! "
-              + "Now what?";
+              + "Now what do you want to do? You can say 'help' for your options.";
               boredCount = 0;
               revCount = 0;
-              var passwords = Math.floor(1000 + Math.random() * 9000);
-              var correctPassword = 1111;
+              passwords = (Math.floor(1000 + Math.random() * 9000));
+              correctPassword = 1111;
                 if (passwords != 6969 || passwords != 1337 || passwords != 1729 || passwords != 6174 || passwords != 1234) {
                   correctPassword = passwords;
                 } else {
                   correctPassword = passwords - 1;
                 }
+              console.log(correctPassword);
           }
           break;
         }
@@ -314,11 +325,12 @@ restService.post('/reply', function(req, res) {
         text = survey[depCount];
 
         if (req.body.result.parameters.yesno == "no" && depCount == 1) {
-          text = "No problem, I understand if it's something you don't feel like talking about. Maybe try some jokes or relaxation instead";
+          text = "No problem, I understand if it's something you don't feel like talking about. Maybe try some jokes or relaxation instead.";
           depCount = 0;
           break;
         } else if (req.body.result.parameters.yesno == "no" && depCount == 7) {
           text = "That's all I can think of at the moment... I'm sorry I couldn't help you directly, but whatever is making you feel down, I hope things get better soon. "
+            + " Is there anything I can do for you?";
           break;
         }
 
@@ -327,7 +339,7 @@ restService.post('/reply', function(req, res) {
                 case 2: 
                     text = "Being sick really sucks. But hey, your body is fighting as hard as it can for you! "
                     + "Just remember to drink lots of liquids to stay hydrated and don't exert yourself today. "
-                    + "Your body deserves a break.";
+                    + "Your body deserves a break. If there's anything else I can help you with, just say 'help'.";
                     depCount = 0;
                     break;
                 case 3: 
@@ -340,20 +352,21 @@ restService.post('/reply', function(req, res) {
                 case 4:
                     text = "Sudden changes in your routine can definitely be a cause of stress. " 
                     + "Take a deep breath and relax; life will get back on course soon. "
-                    + "If you feel like doing some breathing exercises with me, just say 'relax' and I'll gladly help you de-stress.";
-                    ////How about we do some nice, relaxing breathing exercises together?
+                    + "How about we do some nice, relaxing breathing exercises together? Just say 'relax' to start.";
+                    ////
                     stressed = true;
                     depCount = 0;
                     break;
                 case 5: 
                     text = "Hey, I don't blame you -- after all, I stay inside my own Google Home all the time. "
                     + "But I think it's healthy for people to go outside and experience what life has to offer you! "
-                    + "Why don't you take a quick walk and clear your head?";
+                    + "Why don't you take a quick walk? If not, we can do something else. Just say 'help' for your options.";
                     depCount = 0;
                     break;
                 case 6: 
                     text = "I'm surprised to hear that. I think you're a great person to hang out with! "
-                    + "Just don't be afraid to reach out and schedule some fun. And don't worry, I'll always be here if you need a friend.";
+                    + "Just don't be afraid to reach out and schedule some fun. And don't worry, I'll always be here if you need a friend. "
+                    + "If there's anything else I can help you with, just say 'help'.";
                     depCount = 0;
                     break;
                 case 7: 
@@ -389,12 +402,13 @@ restService.post('/reply', function(req, res) {
 
         //   }
         // }
-        text = "I understand that you're feeling upset. Let's try and talk about it... <break time=\"1s\"/> are you mad at someone else, yourself, or something else?";
+        text = "I understand that you're feeling upset. Let's try and talk about it. <break time=\"1s\"/> Who are you mad at: someone else, yourself, or something else?";
         
         if (target == "someone else") {
           text = "I know how betrayed or upset you may feel after someone else has wronged you, especially if you were close. "
             + "Even though you may feel like you don't want anything to do with them, at least tell this person why you're mad at them. "
-            + "Don't let this anger and frustration build up inside -- it's not healthy.";
+            + "Don't let this anger and frustration build up inside -- it's not healthy. ";
+          text += " I can help you relax if you want to calm down first. Just say 'relax' or 'no thanks' to do something else.";
             madCount++;
           break;
         } else if (target == "myself") {
@@ -404,7 +418,8 @@ restService.post('/reply', function(req, res) {
           break;
         } else if (target == "something else") {
           text = "Sometimes life is just unfair to good people. When unfortunate things happen to you and they're out of your control, you can't dwell on them too much! " 
-            + "Life is just testing you, and to pass, you have to keep you head up and move forward. Show life who's boss.";
+            + "Life is just testing you, and to pass, you have to keep you head up and move forward. Show life who's boss! ";
+          text += " I can suggest a good deed that would really do the trick. Just say 'good deed' or 'no thanks' to do something else.";
           break;
         }
 
@@ -416,6 +431,10 @@ restService.post('/reply', function(req, res) {
 
       case "relax":
         text = relax();
+        shortText = "First, sit with your back straight. Then, place your hand on your stomach and relax your shoulders."
+          + "Take a slow, deep breath in through your nose. And then slowly exhale through your mouth."
+          + "Take your time, and repeat as many times as you need.";
+        tooLong = true;
         break;
 
       case "get.rest":
@@ -446,14 +465,15 @@ restService.post('/reply', function(req, res) {
         break;
 
       case "tell.joke":
-        text = "Okay, " + tellJokes();
+        text = "Okay, " + tellJokes()
+        text += " Just say 'another one' for more or 'no thanks' to make me stop!";
         break;
 
       case "rejected":
         if (previousAction == "stay.happy" || previousAction == "do.good") {
-          text = "It's okay, I'm not going to force you to -- maybe some other day! What else are you feeling?";
+          text = "It's okay, I'm not going to force you to. Maybe some other day! What else are you feeling?";
         } else {
-          text = "That's fine, we can do something else. What do you have in mind, buddy?";
+          text = "That's fine, we can do something else. You can say 'help' for your options!";
         }
         break;
 
@@ -481,29 +501,30 @@ restService.post('/reply', function(req, res) {
       //   text = "I'll try to help you decide. I can tell jokes, help you relax, suggest good deeds, play a guessing game with you, and help you cope with any problems in your life. Just ask for any of them!";
       //   break;
 
-      case "get.excited":
-        text = "And you just can't hide it! You're about to lose control and you think you like it."; //<break time=\"1s\"/> Uh... I mean. <break time=\"1s\"/>  I'm excited that you're excited!";
-        break;
+      // case "get.excited":
+      //   text = "And you just can't hide it! You're about to lose control and you think you like it."; //<break time=\"1s\"/> Uh... I mean. <break time=\"1s\"/>  I'm excited that you're excited!";
+      //   break;
 
       default: 
-        text = "My bad, I think I ran into a bit of an error there. Let's start over. How was your day?";
+        text = "My bad, I think I ran into a bit of an error there. Let's start over. How are you feeling?";
     } 
 
     previousAction = action;
 
     console.log(text);
+    console.log("\n");
     if (tooLong) {
       return res.json({
-      speech: '<speak> ' + text + ' </speak>',
-      displayText: shortText,
-      source: "natlangtst2"
-    }); 
+        speech: '<speak> ' + text + ' </speak>',
+        displayText: shortText,
+        source: "natlangtst2"
+      }); 
     } else {
-    return res.json({
-      speech: '<speak> ' + text + ' </speak>',
-      displayText: text,
-      source: "natlangtst2"
-    }); 
+      return res.json({
+        speech: '<speak> ' + text + ' </speak>',
+        displayText: replaceBreaks(text),
+        source: "natlangtst2"
+      }); 
     }
 });
 
@@ -516,8 +537,13 @@ restService.listen((process.env.PORT || 8080), function() {
 
 function replaceBreaks(text) {
   var display = text;
-  if (text.includes("<break time=\"2s\"/> ")) {
-    display = text.replace("<break time=\"2s\"/>", "...");
+  if (text.includes("<break")) {
+    console.log("replacing");
+    var start = text.indexOf("<");
+    var end = text.indexOf(">") + 1;
+    var breakString = text.substring(start, end);
+    console.log(breakString);
+    display = text.replace(new RegExp(breakString, 'g'), "...")
   }
   return display; 
 }
@@ -569,10 +595,10 @@ function sleepBreatheRepeat() {
 
 function doGood() {
   var index = Math.floor(Math.random() * goodDeeds.length);
-  return goodDeeds[index];
+  return goodDeeds[index] + " If you don't feel like it, just say 'no thanks' or 'another one' to try again!";
 }
 
 function tellJokes() {
   var index = Math.floor(Math.random() * jokes.length);
-  return jokes[index];
+  return replaceBreaks(jokes[index]);
 }
