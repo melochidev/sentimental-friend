@@ -426,7 +426,7 @@ restService.post('/reply', function(req, res) {
         break;
 
       case "de.stress": 
-        text = "Being stressed is never fun. You deserve some relaxation. " + relax();
+        text = "Being stressed is never fun. You deserve some relaxation. Just say 'relax' and I will do my best to help you with some calming and mind-clearing breathing exercises. ";
         break;
 
       case "relax":
