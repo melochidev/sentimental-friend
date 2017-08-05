@@ -450,6 +450,9 @@ restService.post('/reply', function(req, res) {
 
       case "relax.repeat":
         text = relaxRepeat();
+        tooLong = true;
+        shortText = "Take a slow, deep breath in through your nose. And then slowly exhale through your mouth."
+          + "Take your time, and repeat as many times as you need.";
         break;
       
       case "getrest.repeat":
