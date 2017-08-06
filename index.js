@@ -460,6 +460,7 @@ restService.post('/reply', function(req, res) {
         shortText = "Close your mouth and inhale through your nose for four seconds. "
             + "Hold your breath for a count of seven. "
             + "Finally, make a woosh sound as you exhale through your mouth, for a count of eight. "
+            + "Say 'repeat' to continue or 'no thanks' to stop.";
         tooLong = true;
         break; 
               
