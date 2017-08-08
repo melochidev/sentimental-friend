@@ -477,7 +477,7 @@ restService.post('/reply', function(req, res) {
         if (previousAction == "stay.happy" || previousAction == "do.good") {
           text = "It's okay, I'm not going to force you to. Maybe some other day! What else are you feeling?";
         } else {
-          text = "That's fine, we can do something else. You can say 'help' for your options!";
+          text = "That's fine, we can do something else. You can say 'help' for your options or just tell me how you're feeling.";
         }
         break;
 
