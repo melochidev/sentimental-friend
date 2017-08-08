@@ -173,7 +173,10 @@ restService.post('/reply', function(req, res) {
 
       if (choice == "game") {
         action = "play.game";
-      }
+      } 
+//       if (choice == "revolution") {
+//         action = "play.revolution";
+//       }
 
       if (req.body.result.parameters.relax == "relax") {
         action == "relax";
@@ -194,8 +197,8 @@ restService.post('/reply', function(req, res) {
         text += tellJokes();
         //shortText = text;
         //shortText += "Just say 'another one' for more!";
-        //tooLong = true;
-        text += " <break time=\"1s\"/> Just say 'another one' for more!";
+        //tooLong = true; 
+        text += " <break time=\"1s\"/> Just say 'another one' for more or 'no thanks' to make me stop!";
         break;
 
       case "play.game": 
@@ -221,7 +224,7 @@ restService.post('/reply', function(req, res) {
           if (choice == "game" || choice == "former" || req.body.result.parameters.game == "game") {
             console.log("guessing game started");
 
-            text = "All right, we're going to play international hide and seek! You have to be the seeker because I don't have legs and cannot move <break time=\"1s\"/>  "
+            text = "All right, we're going to play international hide and seek! You have to be the seeker because I don't have legs and cannot move. <break time=\"1s\"/>  "
               + "Try and guess what country I'm hiding in!";
               gameCount++;
             console.log(text);
@@ -261,7 +264,7 @@ restService.post('/reply', function(req, res) {
                 + correctLocation.charAt(correctLocation.length - 1);
                 break;
           } else if (gameCount >= 1 && location == correctLocation) {
-              text = "Woah, you found me! Nice work, friend. If you want to play again, just say 'Hide!'";
+              text = "Woah, you found me! Nice work, friend. If you want to play again, just say 'Hide!' or 'I'm done' to do something else.";
               correctLocation = places[Math.floor(Math.random() * places.length)];
               boredCount = 0;
               gameCount = 0;
@@ -325,12 +328,12 @@ restService.post('/reply', function(req, res) {
         text = survey[depCount];
 
         if (req.body.result.parameters.yesno == "no" && depCount == 1) {
-          text = "No problem, I understand if it's something you don't feel like talking about. Maybe try some jokes or relaxation instead.";
+          text = "No problem, I understand if it's something you don't feel like talking about. You can say 'help' for a list of other things I can do for you.";
           depCount = 0;
           break;
         } else if (req.body.result.parameters.yesno == "no" && depCount == 7) {
           text = "That's all I can think of at the moment... I'm sorry I couldn't help you directly, but whatever is making you feel down, I hope things get better soon. "
-            + " Is there anything I can do for you?";
+            + " Is there anything I can do for you? You can say 'help' for your options.";
           break;
         }
 
