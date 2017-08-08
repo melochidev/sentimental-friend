@@ -557,7 +557,7 @@ function relax() {
   + ' <break time="1s"/> Take a slow, deep breath in through your nose. <break time ="3s"/> Hold it... <break time="3s"/> And then slowly exhale through your mouth.'
   + ' <break time="2s"/> Again. Inhale through your nose. <break time ="5s"/> And exhale through your mouth.'
   + ' <break time="3s"/> And inhale... <break time ="6s"/> And exhale... <break time ="4s"/>'
-  + ' If you want to keep going, just say "repeat".';
+  + ' If you want to keep going, just say "repeat" or "no thanks" to stop.';
   return audio;
 }
 
