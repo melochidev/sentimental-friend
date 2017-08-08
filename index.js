@@ -19,12 +19,12 @@ var count = 0;
 var depressed = false;
 var survey = [
     "You must be experiencing tough times right now. I want to try to help. Is that okay with you? (Yes or no?)", 
-    "All right, let me see... <break time=\"1s\"/> are you sick or ill at the moment? (Yes or no?)",
-    "Okay, are you under a lot of stress right now? (Yes or no?)",
-    "Did something change in your routine, like a new job, getting up earlier, or staying up later? (Yes or no?)",
-    "Do you tend to stay in your home often? (Yes or no?)",
-    "Are you feeling lonely (Yes or no?)?",
-    "Do you often think negative things about yourself? (Yes or no?)"
+    "All right, just answer my questions with a simple yes or no response... <break time=\"1s\"/> are you sick or ill at the moment?",
+    "Okay, are you under a lot of stress right now?",
+    "Did something change in your routine, like a new job, getting up earlier, or staying up later?",
+    "Do you tend to stay in your home often?",
+    "Are you feeling lonely?",
+    "Do you often think negative things about yourself?"
 ];
 var depression = [];
 var depCount = 0;
