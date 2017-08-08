@@ -580,7 +580,7 @@ function sleepBreathe() {
     + eightSeconds
   var total = warning + start + steps;
 
-  total += "To keep going, just say 'repeat'";
+  total += "To keep going, just say 'repeat' or 'no thanks' to stop.";
 
   return total;
 }
