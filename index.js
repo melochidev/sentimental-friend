@@ -109,7 +109,7 @@ restService.post('/reply', function(req, res) {
   var location = req.body.result.parameters["geo-country"]; 
   var password = req.body.result.parameters.password;
   var target = req.body.result.parameters.angerTargets;
-  var text = "Oh I'm sorry, I don't know how to respond to that. Try a simpler answer.";
+  var text = "Oh I'm sorry, I don't know how to respond to that. Try a simpler answer or say 'reset' if I keep repeating this line.";
   var shortText = "";
   var tooLong = false;
   
