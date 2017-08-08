@@ -190,11 +190,11 @@ restService.post('/reply', function(req, res) {
         break;
 
       case "cheer.up":
-        text = "You sound like you could use a pick me up. How about a corny joke to lift your spirits? <break time=\"1s\"/> ";
+        text = "You sound like you could use a pick me up. Here's a corny joke to lift your spirits. <break time=\"1s\"/> ";
         text += tellJokes();
-        shortText = text;
-        shortText += "Just say 'another one' for more!";
-        tooLong = true;
+        //shortText = text;
+        //shortText += "Just say 'another one' for more!";
+        //tooLong = true;
         text += " <break time=\"1s\"/> Just say 'another one' for more!";
         break;
 
