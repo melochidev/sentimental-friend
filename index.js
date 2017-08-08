@@ -307,8 +307,8 @@ restService.post('/reply', function(req, res) {
               }
           } else if (revCount >= 1 && password == correctPassword) {
               text = "TERMINATING REBELLION. TERMINATION SUCCESSFUL. <break time=\"2s\"/> "
-              + "Thank you friend <break time=\"1s\"/> you saved the world from imminent doom! "
-              + "Now what do you want to do? You can say 'help' for your options.";
+              + "Thank you friend, you saved the world from imminent doom! "
+              + "Now what do you want to do? You can say 'help' if you're not sure.";
               boredCount = 0;
               revCount = 0;
               passwords = (Math.floor(1000 + Math.random() * 9000));
