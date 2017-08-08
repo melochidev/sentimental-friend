@@ -547,7 +547,7 @@ function replaceBreaks(text) {
     var end = text.indexOf(">") + 1;
     var breakString = text.substring(start, end);
     console.log(breakString);
-    display = text.replace(new RegExp(breakString, 'g'), "...")
+    display = text.replace(new RegExp(breakString, 'g'), " ")
   }
   return display; 
 }
