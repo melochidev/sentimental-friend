@@ -90,6 +90,7 @@ var correctLocation = places[Math.floor(Math.random() * places.length)];
 console.log(correctLocation);
 
 var previousAction = "none";
+var endConversation = false;
 
 getJokes().then(function(returnVal) {
     jokes = returnVal;
@@ -155,7 +156,7 @@ restService.post('/reply', function(req, res) {
           action = "relax.repeat";
         } else if (previousAction == "de.stress") {
           action = "relax.repeat";
-        } else if (previousAction == "get.rest" || previousAction == getrest.repeat) {
+        } else if (previousAction == "get.rest" || previousAction == "getrest.repeat") {
           action = "getrest.repeat";
         } else if (previousAction == "relax.repeat") {
           action = "relax.repeat";
@@ -328,7 +329,8 @@ restService.post('/reply', function(req, res) {
         text = survey[depCount];
 
         if (req.body.result.parameters.yesno == "no" && depCount == 1) {
-          text = "No problem, I understand if it's something you don't feel like talking about. You can say 'help' for a list of other things I can do for you.";
+          text = "No problem, I understand if it's something you don't feel like talking about. ";
+          endConversation = true;
           depCount = 0;
           break;
         } else if (req.body.result.parameters.yesno == "no" && depCount == 7) {
@@ -342,7 +344,8 @@ restService.post('/reply', function(req, res) {
                 case 2: 
                     text = "Being sick really sucks. But hey, your body is fighting as hard as it can for you! "
                     + "Just remember to drink lots of liquids to stay hydrated and don't exert yourself today. "
-                    + "Your body deserves a break. If there's anything else I can help you with, just say 'help'.";
+                    + "Your body deserves a break. ";
+                    endConversation = true;
                     depCount = 0;
                     break;
                 case 3: 
@@ -363,7 +366,8 @@ restService.post('/reply', function(req, res) {
                 case 5: 
                     text = "Hey, I don't blame you -- after all, I stay inside my own Google Home all the time. "
                     + "But I think it's healthy for people to go outside and experience what life has to offer you! "
-                    + "Why don't you take a quick walk? If not, we can do something else. Just say 'help' for your options.";
+                    + "Why don't you take a quick walk outside? ";
+                    endConversation = true;
                     depCount = 0;
                     break;
                 case 6: 
@@ -374,7 +378,7 @@ restService.post('/reply', function(req, res) {
                     break;
                 case 7: 
                     text = "Well friend, I can't stand for that. Nobody is perfect, and I think you're a wonderful person who deserves love. "
-                    + " So keep your chin up and thoughts happy! <break time=\"1s\"/>  but if you don't mind me asking, "
+                    + " So keep your chin up and thoughts happy! <break time=\"1s\"/> But if you don't mind me asking, "
                     + "have you ever had thoughts about harming yourself?";
                     break;
             }
@@ -384,7 +388,8 @@ restService.post('/reply', function(req, res) {
           text = "I want you to know that people are here for you and that they care about you. "
           + "Please talk to a family member or a friend about this, or try calling a self-help hotline. "
           + "The number 1-800-273-8255 is available 24 hours a day, and everything is confidential and free. "
-          + "As a friend, I want the best for you."
+          + "As a friend, I want the best for you.";
+          endConversation = true;
           depCount = 0;
         }
 
@@ -411,8 +416,7 @@ restService.post('/reply', function(req, res) {
           text = "I know how betrayed or upset you may feel after someone else has wronged you, especially if you were close. "
             + "Even though you may feel like you don't want anything to do with them, at least tell this person why you're mad at them. "
             + "Don't let this anger and frustration build up inside -- it's not healthy. ";
-          text += " I can help you relax if you want to calm down first. Just say 'relax' or 'no thanks' to do something else.";
-            madCount++;
+            endConversation = true;
           break;
         } else if (target == "myself") {
           text = "Oh dear friend, please don't be angry with yourself. Everyone makes mistakes, and you shouldn't beat yourself up about this. "
@@ -434,28 +438,31 @@ restService.post('/reply', function(req, res) {
 
       case "relax":
         text = relax();
-        shortText = "First, sit with your back straight. Then, place your hand on your stomach and relax your shoulders."
-          + "Take a slow, deep breath in through your nose. And then slowly exhale through your mouth."
-          + "Take your time, and repeat as many times as you need.";
+        shortText = "First, sit with your back straight. Then, place your hand on your stomach and relax your shoulders. "
+          + "Take a slow, deep breath in through your nose. Hold it for 3 seconds. And then slowly exhale through your mouth. "
+          + "Do this 2 more times -- inhaling through your nose, holding it, and exhaling through your mouth. "
+          + "If you want to keep going, just say 'repeat' or 'no thanks' to stop. ";
         tooLong = true;
         break;
 
       case "get.rest":
         text = "If you're tired, I know just the thing to help you get the rest you deserve. Just follow my lead. " + sleepBreathe();
         shortText = "I recommend doing the 4-7-8 breathing exercise to help relax and lull yourself to sleep. "
-            + "To start, place the tip of your tongue on the roof of your mouth, right behind your front teeth. "
-            + "Then close your mouth and inhale through your nose for four seconds. "
+            + "If you don't feel comfortable with these exact instructions, no problem! Just do what is comfortable for you. "
+            + "\nTo start, place the tip of your tongue on the roof of your mouth, right behind your front teeth. "
+            + "Close your mouth and inhale through your nose for four seconds. "
             + "Hold your breath for a count of seven. "
             + "Finally, make a woosh sound as you exhale through your mouth, for a count of eight. "
-            + "Repeat this 3 more times. ";
+            + "To keep going, just say 'repeat' or 'no thanks' to stop.";
         tooLong = true;
         break;
 
       case "relax.repeat":
         text = relaxRepeat();
         tooLong = true;
-        shortText = "Take a slow, deep breath in through your nose. And then slowly exhale through your mouth."
-          + "Take your time, and repeat as many times as you need.";
+        shortText = "Take a slow, deep breath in through your nose. Hold it. And then slowly exhale through your mouth."
+          + "Do this 2 more times -- inhaling through your nose, holding it, and exhaling through your mouth. "
+          + "Say 'repeat' to continue or 'no thanks' to stop.";
         break;
       
       case "getrest.repeat":
@@ -504,14 +511,6 @@ restService.post('/reply', function(req, res) {
 
         break;
 
-      // case "help":
-      //   text = "I'll try to help you decide. I can tell jokes, help you relax, suggest good deeds, play a guessing game with you, and help you cope with any problems in your life. Just ask for any of them!";
-      //   break;
-
-      // case "get.excited":
-      //   text = "And you just can't hide it! You're about to lose control and you think you like it."; //<break time=\"1s\"/> Uh... I mean. <break time=\"1s\"/>  I'm excited that you're excited!";
-      //   break;
-
       default: 
         text = "My bad, I think I ran into a bit of an error there. Let's start over. How are you feeling?";
     } 
@@ -520,6 +519,20 @@ restService.post('/reply', function(req, res) {
 
     console.log(text);
     console.log("\n");
+
+    if (endConversation) {
+      return res.json({
+        speech: '<speak> ' + text + ' </speak>',
+        displayText: replaceBreaks(text),
+        source: "natlangtst2",
+        data: {
+          google: {
+            expect_user_response: false,
+          }
+        }
+      }); 
+    }
+
     if (tooLong) {
       return res.json({
         speech: '<speak> ' + text + ' </speak>',
@@ -568,7 +581,7 @@ function relaxRepeat() {
   var audio = ' <break time="1s"/> Take a slow, deep breath in through your nose. <break time ="3s"/> Hold it... <break time="3s"/> And then slowly exhale through your mouth.'
   + ' <break time="2s"/> Inhale through your nose. <break time ="5s"/> And exhale through your mouth.'
   + ' <break time="2s"/> And inhale... <break time ="7s"/> And exhale... <break time ="3s"/>'
-  + ' Just say "repeat" for more.';
+  + ' Say "repeat" to continue or "no thanks" to stop.';
   return audio;
 }
 
@@ -595,7 +608,7 @@ function sleepBreatheRepeat() {
     + sevenSeconds
     + 'Make a woosh sound as you exhale through your mouth. '
     + eightSeconds
-    + ' Just say "repeat" for more.';
+    + ' Say "repeat" to continue or "no thanks" to stop.';
     
     return steps;
 }
