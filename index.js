@@ -183,7 +183,7 @@ restService.post('/reply', function(req, res) {
         action == "relax";
       }
 
-      ////////////////////////////////////////////////////////////////////////////////////////////
+      ////////////////////////// Giant switch statement for handling all emotions and actions //////////////////////////////////
       console.log(action);  
       switch (action) {
 
@@ -191,6 +191,7 @@ restService.post('/reply', function(req, res) {
         text = "I'm glad you're feeling good! Let's channel these positive vibes and make the world a little better. "
         + "Try and ";
         text += doGood();
+        endConversation = true;
         break;
 
       case "cheer.up":
@@ -472,7 +473,8 @@ restService.post('/reply', function(req, res) {
         break; 
               
       case "do.good": 
-        text = "You could " + doGood(); 
+        text = "Sure, I like a person who wants to make the world a better place! You could try and " + doGood(); 
+        endConversation = true;
         break;
 
       case "tell.joke":
@@ -612,7 +614,8 @@ function sleepBreatheRepeat() {
 
 function doGood() {
   var index = Math.floor(Math.random() * goodDeeds.length);
-  return goodDeeds[index] + " If you don't feel like it, just say 'no thanks' or 'another one' to try again!";
+  return goodDeeds[index];
+      //+ " If you don't feel like it, just say 'no thanks' or 'another one' to try again!";
 }
 
 function tellJokes() {
