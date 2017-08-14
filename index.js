@@ -622,3 +622,20 @@ function tellJokes() {
   var index = Math.floor(Math.random() * jokes.length);
   return replaceBreaks(jokes[index]);
 }
+
+function stop_conversation() { 
+  var api_request = new Request('https://api.api.ai/v1/query?v=20150910', {
+        method: 'POST',
+        mode: 'cors',
+        redirect: 'follow',
+        headers: {
+            'Authorization': 'Bearer 21f6a5778d484870ad46be4d34ac2eeb',
+            'content-Type': 'application/json; charset=utf-8'
+        },
+        body: JSON.stringify({
+            q: 'stop',
+            lang: 'en',
+            sessionId: '44628d21-d7a4-47d5-b1c6-a7f851be65fv'
+        })
+    });
+}
