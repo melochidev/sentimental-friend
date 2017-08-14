@@ -196,9 +196,6 @@ restService.post('/reply', function(req, res) {
       case "cheer.up":
         text = "You sound like you could use a pick me up. Here's a corny joke to lift your spirits. <break time=\"1s\"/> ";
         text += tellJokes();
-        //shortText = text;
-        //shortText += "Just say 'another one' for more!";
-        //tooLong = true; 
         text += " <break time=\"1s\"/> Just say 'another one' for more or 'no thanks' to make me stop!";
         break;
 
@@ -447,7 +444,7 @@ restService.post('/reply', function(req, res) {
 
       case "get.rest":
         text = "If you're tired, I know just the thing to help you get the rest you deserve. Just follow my lead. " + sleepBreathe();
-        shortText = "I recommend doing the 4-7-8 breathing exercise to help relax and lull yourself to sleep. "
+        shortText = "If you're tired, I know just the thing to help you get the rest you deserve. Just follow my lead. "
             + "If you don't feel comfortable with these exact instructions, no problem! Just do what is comfortable for you. "
             + "\nTo start, place the tip of your tongue on the roof of your mouth, right behind your front teeth. "
             + "Close your mouth and inhale through your nose for four seconds. "
@@ -620,22 +617,5 @@ function doGood() {
 
 function tellJokes() {
   var index = Math.floor(Math.random() * jokes.length);
-  return replaceBreaks(jokes[index]);
-}
-
-function stop_conversation() { 
-  var api_request = new Request('https://api.api.ai/v1/query?v=20150910', {
-        method: 'POST',
-        mode: 'cors',
-        redirect: 'follow',
-        headers: {
-            'Authorization': 'Bearer 21f6a5778d484870ad46be4d34ac2eeb',
-            'content-Type': 'application/json; charset=utf-8'
-        },
-        body: JSON.stringify({
-            q: 'stop',
-            lang: 'en',
-            sessionId: '44628d21-d7a4-47d5-b1c6-a7f851be65fv'
-        })
-    });
+  return jokes[index];
 }
