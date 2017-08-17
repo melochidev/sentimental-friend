@@ -588,7 +588,7 @@ function relaxRepeat() {
   + ' <break time="3s"/> Inhale. <break time ="4s"/> Hold it... <break time="4s"/> Exhale.'
   + ' <break time="4s"/> Inhale. <break time ="5s"/> Hold it... <break time="5s"/> Exhale. '
   + ' <break time ="5s"/> Inhale. <break time ="5s"/> Hold it... <break time="5s"/> Exhale. '
-  + ' <break time ="5s"/> Inhale. <break time ="5s"/> Hold it... <break time="5s"/> Exhale. '
+  + ' <break time ="5s"/> Inhale. <break time ="5s"/> Hold it... <break time="5s"/> Exhale. <break time ="5s"/> '
   + ' Say "repeat" to continue or "no thanks" to stop.';
   return audio;
 }
