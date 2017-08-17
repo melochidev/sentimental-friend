@@ -90,7 +90,6 @@ var correctLocation = places[Math.floor(Math.random() * places.length)];
 console.log(correctLocation);
 
 var previousAction = "none";
-var endConversation = false;
 
 getJokes().then(function(returnVal) {
     jokes = returnVal;
@@ -113,6 +112,7 @@ restService.post('/reply', function(req, res) {
   var text = "Oh I'm sorry, I don't know how to respond to that. Try a simpler answer or say 'reset' if I keep repeating this line.";
   var shortText = "";
   var tooLong = false;
+  var endConversation = false;
   
   //console.log("calling webhook.");
       //ROUTING OF ACTIONS
@@ -436,10 +436,12 @@ restService.post('/reply', function(req, res) {
 
       case "relax":
         text = relax();
-        shortText = "First, sit with your back straight. Then, place your hand on your stomach and relax your shoulders. "
-          + "Take a slow, deep breath in through your nose. Hold it for 3 seconds. And then slowly exhale through your mouth. "
-          + "Do this 2 more times -- inhaling through your nose, holding it, and exhaling through your mouth. "
-          + "If you want to keep going, just say 'repeat' or 'no thanks' to stop. ";
+        shortText = 'First, sit up with your back straight. Now, close your eyes and relax your shoulders. '
+          + ' Take a slow, deep breath in through your nose. Hold it... And then slowly exhale through your mouth. '
+          + ' Again. Inhale through your nose. Hold it... And exhale through your mouth. '
+          + ' And inhale. Hold it... And exhale. '
+          + ' Inhale. Hold it... Exhale. ' 
+          + ' If you want to keep going, just say "repeat" or "no thanks" to stop.';
         tooLong = true;
         break;
 
@@ -447,10 +449,10 @@ restService.post('/reply', function(req, res) {
         text = "If you're tired, I know just the thing to help you get the rest you deserve. Just follow my lead. " + sleepBreathe();
         shortText = "If you're tired, I know just the thing to help you get the rest you deserve. Just follow my lead. "
             + "If you don't feel comfortable with these exact instructions, no problem! Just do what is comfortable for you. "
-            + "\nTo start, place the tip of your tongue on the roof of your mouth, right behind your front teeth. "
-            + "Close your mouth and inhale through your nose for four seconds. "
-            + "Hold your breath for a count of seven. "
-            + "Finally, make a woosh sound as you exhale through your mouth, for a count of eight. "
+            + "To start, place the tip of your tongue on the roof of your mouth, right behind your front teeth. "
+            + "Close your mouth and inhale through your nose. "
+            + "Hold your breath. "
+            + "Finally, make a woosh sound as you exhale through your mouth. "
             + "To keep going, just say 'repeat' or 'no thanks' to stop.";
         tooLong = true;
         break;
@@ -458,17 +460,21 @@ restService.post('/reply', function(req, res) {
       case "relax.repeat":
         text = relaxRepeat();
         tooLong = true;
-        shortText = "Take a slow, deep breath in through your nose. Hold it. And then slowly exhale through your mouth."
-          + "Do this 2 more times -- inhaling through your nose, holding it, and exhaling through your mouth. "
-          + "Say 'repeat' to continue or 'no thanks' to stop.";
+        shortText = 'Inhale through your nose. Hold it... Exhale through your mouth. '
+          + ' Inhale. Hold it... Exhale. '
+          + ' Inhale. Hold it... Exhale. ' 
+          + ' Inhale. Hold it... Exhale. '
+          + ' Inhale. Hold it... Exhale. '
+          + ' Say "repeat" to continue or "no thanks" to stop.';
         break;
       
       case "getrest.repeat":
         text = sleepBreatheRepeat();
-        shortText = "Close your mouth and inhale through your nose for four seconds. "
-            + "Hold your breath for a count of seven. "
-            + "Finally, make a woosh sound as you exhale through your mouth, for a count of eight. "
-            + "Say 'repeat' to continue or 'no thanks' to stop.";
+        shortText = 'Inhale through your nose. Hold your breath. Exhale through your mouth. '
+          + 'Inhale. Hold. Exhale. '
+          + 'Inhale. Hold. Exhale. '
+          + 'Inhale. Hold. Exhale. '
+          + "Say 'repeat' to continue or 'no thanks' to stop.";
         tooLong = true;
         break; 
               
@@ -568,18 +574,21 @@ function replaceBreaks(text) {
 }
 
 function relax() {
-  var audio =' <break time="1s"/> First I need you to sit with your back straight. <break time="2s"/> Now, place your hand on your stomach, close your eyes, and relax your shoulders.'
+  var audio =' <break time="1s"/> First, sit up with your back straight. <break time="2s"/> Now, close your eyes and relax your shoulders.'
   + ' <break time="1s"/> Take a slow, deep breath in through your nose. <break time ="3s"/> Hold it... <break time="3s"/> And then slowly exhale through your mouth.'
-  + ' <break time="2s"/> Again. Inhale through your nose. <break time ="5s"/> And exhale through your mouth.'
-  + ' <break time="3s"/> And inhale... <break time ="6s"/> And exhale... <break time ="4s"/>'
+  + ' <break time="3s"/> Again. Inhale through your nose. <break time ="4s"/> Hold it... <break time="4s"/> And exhale through your mouth.'
+  + ' <break time="4s"/> And inhale. <break time ="5s"/> Hold it... <break time="5s"/> And exhale. '
+  + ' <break time ="5s"/>Inhale. <break time ="5s"/> Hold it... <break time="5s"/> Exhale. <break time ="5s"/>' 
   + ' If you want to keep going, just say "repeat" or "no thanks" to stop.';
   return audio;
 }
 
 function relaxRepeat() {
-  var audio = ' <break time="1s"/> Take a slow, deep breath in through your nose. <break time ="3s"/> Hold it... <break time="3s"/> And then slowly exhale through your mouth.'
-  + ' <break time="2s"/> Inhale through your nose. <break time ="5s"/> And exhale through your mouth.'
-  + ' <break time="2s"/> And inhale... <break time ="7s"/> And exhale... <break time ="3s"/>'
+  var audio = ' <break time="1s"/> Inhale through your nose. <break time ="3s"/> Hold it... <break time="3s"/> Exhale through your mouth.'
+  + ' <break time="3s"/> Inhale. <break time ="4s"/> Hold it... <break time="4s"/> Exhale.'
+  + ' <break time="4s"/> Inhale. <break time ="5s"/> Hold it... <break time="5s"/> Exhale. '
+  + ' <break time ="5s"/> Inhale. <break time ="5s"/> Hold it... <break time="5s"/> Exhale. '
+  + ' <break time ="5s"/> Inhale. <break time ="5s"/> Hold it... <break time="5s"/> Exhale. '
   + ' Say "repeat" to continue or "no thanks" to stop.';
   return audio;
 }
@@ -587,11 +596,11 @@ function relaxRepeat() {
 function sleepBreathe() {
   var warning = 'But if you don\'t feel comfortable with these exact instructions, no problem! Just do what is comfortable for you. <break time="1s"/> '
   var start = 'Now start by placing the tip of your tongue on the roof of your mouth, right behind your front teeth. <break time="1s"/> '
-  var steps = 'Close your mouth and inhale through your nose for four seconds. '
+  var steps = 'Close your mouth and inhale through your nose. '
     + fourSeconds
-    + 'Hold your breath for a count of seven. ' 
+    + 'Hold your breath. ' 
     + sevenSeconds
-    + 'Make a woosh sound as you exhale through your mouth, for a count of eight. '
+    + 'Make a woosh sound as you exhale through your mouth. '
     + eightSeconds
   var total = warning + start + steps;
 
@@ -601,11 +610,29 @@ function sleepBreathe() {
 }
 
 function sleepBreatheRepeat() {
-    var steps = 'Close your mouth and inhale through your nose. '
+    var steps = 'Inhale through your nose. '
     + fourSeconds
     + 'Hold your breath. ' 
     + sevenSeconds
-    + 'Make a woosh sound as you exhale through your mouth. '
+    + 'Exhale through your mouth. '
+    + eightSeconds
+    + 'Inhale. '
+    + fourSeconds
+    + 'Hold. ' 
+    + sevenSeconds
+    + 'Exhale. '
+    + eightSeconds
+    + 'Inhale. '
+    + fourSeconds
+    + 'Hold. ' 
+    + sevenSeconds
+    + 'Exhale. '
+    + eightSeconds
+    + 'Inhale. '
+    + fourSeconds
+    + 'Hold. ' 
+    + sevenSeconds
+    + 'Exhale. '
     + eightSeconds
     + ' Say "repeat" to continue or "no thanks" to stop.';
     
