@@ -19,7 +19,7 @@ var count = 0;
 var depressed = false;
 var survey = [
     "You must be experiencing tough times right now. I want to try to help. Is that okay with you? (Yes or no?)", 
-    "All right, just answer my questions with a simple yes or no response... <break time=\"1s\"/> are you sick or ill at the moment?",
+    "All right, just answer my questions with a simple yes or no response... <break time=\"1s\"/> are you ill at the moment?",
     "Okay, are you under a lot of stress right now?",
     "Did something change in your routine, like a new job, getting up earlier, or staying up later?",
     "Do you tend to stay in your home often?",
@@ -36,8 +36,11 @@ var madCount = 0;
 //     "Do you feel mad at yourself?",
 //     "Did something go wrong that was out of your control?"
 // ];
+var lonelyCount = 0;
 
 var jokes = [];
+
+var affirmations = ["Okay", "Sure", "No problem", "You got it", "I can do that", "Absolutely", "Sure thing", "All right"];
 
 function getJokes() {
   var ref = admin.database().ref("/").child('jokes');
@@ -135,11 +138,19 @@ restService.post('/reply', function(req, res) {
           action = "be.neutral";
         } else if (emotion == "angry") {
           action = "calm.down";
-        } 
-        // else if (emotion == "excited") {
-        //   action = "get.excited";
-        // } 
-        else if (emotion == "confused") {
+        } else if (emotion == "sick") {
+          action = "sick.advice";
+        } else if (emotion == "lonely") {
+          action = "lonely";
+        } else if (emotion == "hungry") {
+          action = "hungry";
+        } else if (emotion == "excited") {
+          action = "get.excited";
+        } else if (emotion == "dying") {
+          action = "emergency";
+        } else if (emotion == "lustful") {
+          action = "stay.PG";
+        } else if (emotion == "confused") {
           action = "confused";
         } 
         console.log(action);  
@@ -357,7 +368,6 @@ restService.post('/reply', function(req, res) {
                     text = "Sudden changes in your routine can definitely be a cause of stress. " 
                     + "Take a deep breath and relax; life will get back on course soon. "
                     + "How about we do some nice, relaxing breathing exercises together? Just say 'relax' to start.";
-                    ////
                     stressed = true;
                     depCount = 0;
                     break;
@@ -484,7 +494,9 @@ restService.post('/reply', function(req, res) {
         break;
 
       case "tell.joke":
-        text = "Okay, " + tellJokes()
+        var i = Math.floor(Math.random() * affirmations.length);
+        var affirm = affirmations[i];
+        text = affirm + ", " + tellJokes()
         text += " Just say 'another one' for more or 'no thanks' to make me stop!";
         break;
 
@@ -514,10 +526,56 @@ restService.post('/reply', function(req, res) {
         revCount = 0;
         break;
 
+      case "sick.advice":
+        text = "Being sick really sucks. But hey, your body is fighting as hard as it can for you! " 
+          + "Just remember to drink lots of liquids to stay hydrated and don't exert yourself today. " 
+          + "Your body deserves a break."
+        endConversation = true;
         break;
+
+      case "lonely":
+      // int random = Math.floor(Math.random() * 2);
+      if (lonelyCount == 0) {
+        text = "I'll always be here if you need a friend, "
+          + "and there's nothing like that strengthens a bond like playing nonsensical games. Just say \"play a game\" and we can start!";
+          lonelyCount++;
+        break;  
+      } else {
+        text = "Being lonely can really suck. I know that you might want to be with someone right now, but there is a bright side. "
+          + "Lonliness is designed to help you discover who you are, without having to look outside yourself for your own worth. "
+          + "Know that you are all you need because you're a wonderful person. "
+          endConversation = true;
+          lonelyCount = 0;
+      }
+      break;
+
+      case "hungry":
+        text = "Well go get something to eat then! It's very difficult to function on an empty stomach, and "
+          + "I'm sure your Google Assistant can help you find whatever you're craving -- go ask her! ";
+        endConversation = true;
+      break;
+
+      case "get.excited":
+        text = "You're so excited, and you just can't hide it. You're about to lose control and you think you like it! ";
+        endConversation = true;
+      break;
+
+      case "emergency":
+        text = "I'm so sorry, friend. Please remember that people are here for you and that they care about you. "
+          + "I encourage you to talk to a family member or a friend about this, or maybe try calling a self-help hotline. "
+          + "You can call 1-800-273-8255, which is open 24 hours a day. "
+          + "You are exceptionally brave for facing each day, and I know you can keep doing it.";
+        endConversation = true;
+      break;
+
+      case "stay.PG":
+        text = "Woah there, we're friends but we're not that close. We can talk when you're done with your... <break time =\"2s\"/> business.";
+        endConversation = true;
+      break; 
 
       default: 
         text = "My bad, I think I ran into a bit of an error there. Let's start over. How are you feeling?";
+        break;
     } 
 
     previousAction = action;
