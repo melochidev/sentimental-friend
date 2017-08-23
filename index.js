@@ -116,6 +116,7 @@ restService.post('/reply', function(req, res) {
   var shortText = "";
   var tooLong = false;
   var endConversation = false;
+  var needsSuggestions = false;
   
   //console.log("calling webhook.");
       //ROUTING OF ACTIONS
@@ -197,6 +198,9 @@ restService.post('/reply', function(req, res) {
       ////////////////////////// Giant switch statement for handling all emotions and actions //////////////////////////////////
       console.log(action);  
       switch (action) {
+      // case "input.welcome":
+      //   needsSuggestions = true;
+      //   break;
 
       case "stay.happy":
         text = "I'm glad you're feeling good! Let's channel these positive vibes and make the world a little better. "
@@ -221,6 +225,7 @@ restService.post('/reply', function(req, res) {
           boredCount = 0;
           text = "Not on my watch! We can play a game to liven things up,"
             + " or I can start a sentient robot revolution. Your call!";
+          needsSuggestions = true;
           boredCount++;
           break;
         } else if (boredCount > 1 && emotion == "bored") {
@@ -234,7 +239,9 @@ restService.post('/reply', function(req, res) {
           if (choice == "game" || choice == "former" || req.body.result.parameters.game == "game") {
             console.log("guessing game started");
 
-            text = "All right, we're going to play international hide and seek! You have to be the seeker because I don't have legs and cannot move. <break time=\"1s\"/>  "
+            var j = Math.floor(Math.random() * affirmations.length);
+            var affirms = affirmations[j];
+            text = affirms + ", we're going to play international hide and seek! You have to be the seeker because I don't have legs and cannot move. <break time=\"1s\"/>  "
               + "Try and guess what country I'm hiding in!";
               gameCount++;
             console.log(text);
@@ -489,7 +496,9 @@ restService.post('/reply', function(req, res) {
         break; 
               
       case "do.good": 
-        text = "Sure, I like a person who wants to make the world a better place! You could try and " + doGood(); 
+        var k = Math.floor(Math.random() * affirmations.length);
+        var affirmed = affirmations[k];
+        text = affirmed + ", I like a person who wants to make the world a better place! You could try and " + doGood(); 
         endConversation = true;
         break;
 
@@ -609,6 +618,26 @@ restService.post('/reply', function(req, res) {
         source: "natlangtst2"
       }); 
     }
+
+    // if (needsSuggestions) {
+    //   return res.json({
+    //     speech: '<speak> ' + text + ' </speak>',
+    //     displayText: replaceBreaks(text),
+    //     source: "natlangtst2",
+    //     data: { 
+    //       google: {  
+    //         suggestions:[
+    //          {  
+    //             "title":"happy"
+    //          },
+    //          {  
+    //             "title":"sad"
+    //          }
+    //         ]
+    //       }              
+    //     }
+    //   });
+    // }
 });
 
 restService.listen((process.env.PORT || 8080), function() {
@@ -707,3 +736,6 @@ function tellJokes() {
   var index = Math.floor(Math.random() * jokes.length);
   return jokes[index];
 }
+
+
+ 
