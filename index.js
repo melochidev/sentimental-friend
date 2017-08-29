@@ -153,7 +153,9 @@ restService.post('/reply', function(req, res) {
           action = "stay.PG";
         } else if (emotion == "confused") {
           action = "confused";
-        } 
+        } else if (emotion == "homesick") {
+          action = "miss.home";
+        }
         console.log(action);  
       }
 
@@ -581,6 +583,13 @@ restService.post('/reply', function(req, res) {
         text = "Woah there, we're friends but we're not that close. We can talk when you're done with your... <break time =\"2s\"/> business.";
         endConversation = true;
       break; 
+              
+      case "miss.home":
+         text = "Being homesick can be a very tough thing to go through. I know you really miss home and you may not like where you are right now, "
+              + "but everything will be okay. All this new stuff must be overwhelming, but just remember ease into everything gently. " 
+              + "Try to keep familiar things around you and do stuff like you would at home. You will adapt, slowly but surely. I believe in you!";
+         endConversation = true;
+      break;
 
       default: 
         text = "My bad, I think I ran into a bit of an error there. Let's start over. How are you feeling?";
