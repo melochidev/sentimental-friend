@@ -427,24 +427,37 @@ restService.post('/reply', function(req, res) {
 
         //   }
         // }
-        text = "I understand that you're feeling upset. Let's try and talk about it. <break time=\"1s\"/> Who are you mad at: someone else, yourself, or something else?";
-        
-        if (target == "someone else") {
-          text = "I know how betrayed or upset you may feel after someone else has wronged you, especially if you were close. "
-            + "Even though you may feel like you don't want anything to do with them, at least tell this person why you're mad at them. "
-            + "Don't let this anger and frustration build up inside -- it's not healthy. ";
-            endConversation = true;
-          break;
-        } else if (target == "myself") {
-          text = "Oh dear friend, please don't be angry with yourself. Everyone makes mistakes, and you shouldn't beat yourself up about this. "
-            + "Just take a deep breath, and remember, what is in the past is in the past now. Everything is going to be okay. "
-            + "I can help you relax if you want to take your mind off of the things that are bothering you. Just say 'relax'.";
-          break;
-        } else if (target == "something else") {
-          text = "Sometimes life is just unfair to good people. When unfortunate things happen to you and they're out of your control, you can't dwell on them too much! " 
-            + "Life is just testing you, and to pass, you have to keep you head up and move forward. Show life who's boss! ";
-          text += " I can suggest a good deed that would really do the trick. Just say 'good deed' or 'no thanks' to do something else.";
-          break;
+        if (madCount == 0) {
+            text = "I understand that you're feeling upset. Let's try and talk about it. <break time=\"1s\"/> Who are you mad at: someone else, yourself, or something else?";
+            madCount++;
+            break;
+        }
+        if (madCount == 1) {
+            if (target == "someone else") {
+                text = "I know how betrayed or upset you may feel after someone else has wronged you, especially if you were close. "
+                    + "Even though you may feel like you don't want anything to do with them, at least tell this person why you're mad at them. "
+                    + "Don't let this anger and frustration build up inside -- it's not healthy. ";
+                endConversation = true;
+                madCount = 0;
+                break;
+            } else if (target == "myself") {
+                text = "Oh dear friend, please don't be angry with yourself. Everyone makes mistakes, and you shouldn't beat yourself up about this. "
+                    + "Just take a deep breath, and remember, what is in the past is in the past now. Everything is going to be okay. "
+                    + "I can help you relax if you want to take your mind off of the things that are bothering you. Just say 'relax'.";
+                madCount = 0;
+                break;
+            } else if (target == "something else") {
+                text = "Sometimes life is just unfair to good people. When unfortunate things happen to you and they're out of your control, you can't dwell on them too much! " 
+                    + "Life is just testing you, and to pass, you have to keep you head up and move forward. Show life who's boss! ";
+                text += " I can suggest a good deed that would really do the trick. Just say 'good deed' or 'no thanks' to do something else.";
+                madCount = 0;
+                break;
+            } else if (target == "you") {
+                text = "I'm so sorry, I didn't mean to make you upset. I'll let you cool off and I will try and do better next time.";
+                madCount = 0;
+                endConversation = true;
+                break;
+            }
         }
 
         break;
@@ -526,6 +539,8 @@ restService.post('/reply', function(req, res) {
         boredCount = 0;
         gameCount = 0;
         revCount = 0;
+        madCount = 0;
+
         break;
 
       case "reset":
@@ -535,6 +550,7 @@ restService.post('/reply', function(req, res) {
         boredCount = 0;
         gameCount = 0;
         revCount = 0;
+        madCount = 0;
         break;
 
       case "sick.advice":
