@@ -19,8 +19,8 @@ var count = 0;
 var depressed = false;
 var survey = [
     "You must be experiencing tough times right now. I want to try to help. Is that okay with you? (Yes or no?)", 
-    "All right, just answer my questions with a simple yes or no response... <break time=\"1s\"/> are you ill at the moment?",
-    "Okay, are you under a lot of stress right now?",
+    "All right, just answer my questions with a simple yes or no response... <break time=\"1s\"/> are you under a lot of stress right now?",
+    "Okay, are you ill at the moment?",
     "Did something change in your routine, like a new job, getting up earlier, or staying up later?",
     "Do you tend to stay in your home often?",
     "Are you feeling lonely?",
@@ -360,17 +360,17 @@ restService.post('/reply', function(req, res) {
         if (req.body.result.parameters.yesno == "yes" && depCount <= 7) {
             switch (depCount) {
                 case 2: 
-                    text = "Being sick really sucks. But hey, your body is fighting as hard as it can for you! "
-                    + "Just remember to drink lots of liquids to stay hydrated and don't exert yourself today. "
-                    + "Your body deserves a break. ";
-                    endConversation = true;
-                    depCount = 0;
-                    break;
-                case 3: 
                     text = "Life can be overwhelming sometimes. Try to relax by meditating, doing yoga, "
                     + "or sitting quietly for a few minutes with a cup of tea or a book. "
                     + "If you feel like doing some breathing exercises with me, just say 'relax' and I'll gladly help you de-stress.";
                     stressed = true;
+                    depCount = 0;
+                    break;
+                case 3: 
+                    text = "Being sick really sucks. But hey, your body is fighting as hard as it can for you! "
+                    + "Just remember to drink lots of liquids to stay hydrated and don't exert yourself today. "
+                    + "Your body deserves a break. ";
+                    endConversation = true;
                     depCount = 0;
                     break;
                 case 4:
@@ -419,14 +419,6 @@ restService.post('/reply', function(req, res) {
         break;
 
       case "calm.down": 
-        // text = "Oh no, it sounds like something really unfortunate happened to you if you're feeling that angry. I'm sorry to hear that. " 
-        // + "I can help you relax if you want to take your mind off of the things that are bothering you. Just say 'relax'.";
-        // break;
-        // if (madCount == 1) {
-        //   if (req.body.result.parameters.yesno == "no") { 
-
-        //   }
-        // }
         if (madCount == 0) {
             text = "I understand that you're feeling upset. Let's try and talk about it. <break time=\"1s\"/> Who are you mad at: someone else, yourself, or something else?";
             madCount++;
@@ -561,7 +553,6 @@ restService.post('/reply', function(req, res) {
         break;
 
       case "lonely":
-      // int random = Math.floor(Math.random() * 2);
       if (lonelyCount == 0) {
         text = "I'll always be here if you need a friend, "
           + "and there's nothing like that strengthens a bond like playing nonsensical games. Just say \"play a game\" and we can start!";
@@ -629,7 +620,6 @@ restService.post('/reply', function(req, res) {
         }
       }); 
     }
-
     if (tooLong) {
       return res.json({
         speech: '<speak> ' + text + ' </speak>',
@@ -643,26 +633,6 @@ restService.post('/reply', function(req, res) {
         source: "natlangtst2"
       }); 
     }
-
-    // if (needsSuggestions) {
-    //   return res.json({
-    //     speech: '<speak> ' + text + ' </speak>',
-    //     displayText: replaceBreaks(text),
-    //     source: "natlangtst2",
-    //     data: { 
-    //       google: {  
-    //         suggestions:[
-    //          {  
-    //             "title":"happy"
-    //          },
-    //          {  
-    //             "title":"sad"
-    //          }
-    //         ]
-    //       }              
-    //     }
-    //   });
-    // }
 });
 
 restService.listen((process.env.PORT || 8080), function() {
