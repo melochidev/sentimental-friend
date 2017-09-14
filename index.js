@@ -604,6 +604,16 @@ restService.post('/reply', function(req, res) {
               + "Try to keep familiar things around you and do stuff like you would at home. You will adapt, slowly but surely. I believe in you!";
          endConversation = true;
       break;
+              
+      case "bye":
+        text = "It was nice talking to you! Good bye and I hope to see you again, friend."
+        count = 0;
+        depCount = 0;
+        boredCount = 0;
+        gameCount = 0;
+        revCount = 0;
+        madCount = 0;
+        break;
 
       default: 
         text = "My bad, I think I ran into a bit of an error there. Let's start over. How are you feeling?";
