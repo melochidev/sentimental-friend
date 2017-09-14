@@ -344,7 +344,7 @@ restService.post('/reply', function(req, res) {
         break;
        
       case "give.up":
-          text = "Looks like I win this round! I was hiding in " + correctLocation + " all along. Feel free to challenge me again when you're up for it. Is there anything else I can do for you?";
+          text = "Looks like I win this round! I was hiding in " + correctLocation + " all along. Feel free to challenge me again when you're up for it. But while you recover from that devastating loss, is there anything else I can do for you?";
           boredCount = 0;
           gameCount = 0;
           revCount = 0;
