@@ -224,7 +224,6 @@ restService.post('/reply', function(req, res) {
 
       case "have.fun":
         if (boredCount == 0 && emotion == "bored") { 
-          boredCount = 0;
           text = "Not on my watch! We can play a game to liven things up,"
             + " or I can start a sentient robot revolution. Your call!";
           needsSuggestions = true;
