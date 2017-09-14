@@ -342,7 +342,15 @@ restService.post('/reply', function(req, res) {
           break;
         }
         break;
-
+       
+      case "give.up":
+          text = "Looks like I win this round! I was hiding in " + correctLocation + " all along. Feel free to challenge me again when you're up for it. Is there anything else I can do for you?";
+          boredCount = 0;
+          gameCount = 0;
+          revCount = 0;
+          correctLocation = places[Math.floor(Math.random() * places.length)];
+          break;
+              
       case "serious.screening": 
         text = survey[depCount];
 
