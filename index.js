@@ -264,7 +264,7 @@ restService.post('/reply', function(req, res) {
           if (gameCount == 1 && location != correctLocation && choice.length == 0) {
               text = "I'm not there! Keep looking buddy.";
               gameCount++;
-          } else if (gameCount >= 2 && location != correctLocation && choice.length == 0 && hint == 2) {
+          } else if (gameCount >= 2 && location != correctLocation && choice.length == 0 && hint == 3) {
               text = "Not there! Keep searching or give up to the number one hide-and-seek player! (It's me, by the way). ";
               gameCount++;
           } else if (gameCount >= 2 && location != correctLocation && choice.length == 0) {
@@ -285,7 +285,8 @@ restService.post('/reply', function(req, res) {
           } else if (gameCount >= 4 && choice == "hint" && location.length == 0 && hint == 2) {
               text = "Okay, but this is the last hint you get. No more! The last letter of my hiding spot is " 
                 + correctLocation.charAt(correctLocation.length - 1);
-                break;
+              hint++;
+              break;
           } else if (gameCount >= 1 && location == correctLocation) {
               text = "Woah, you found me! Nice work, friend. If you want to play again, just say 'Hide!' or 'I'm done' to do something else.";
               correctLocation = places[Math.floor(Math.random() * places.length)];
