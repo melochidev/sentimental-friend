@@ -264,8 +264,11 @@ restService.post('/reply', function(req, res) {
           if (gameCount == 1 && location != correctLocation && choice.length == 0) {
               text = "I'm not there! Keep looking buddy.";
               gameCount++;
+          } else if (gameCount >= 2 && location != correctLocation && choice.length == 0 && hint == 2) {
+              text = "Not there! Keep searching or give up to the number one hide-and-seek player! (It's me, by the way). ";
+              gameCount++;
           } else if (gameCount >= 2 && location != correctLocation && choice.length == 0) {
-              text = "Nope, sorry! Keep guessing or ask for a hint";
+              text = "Nope, sorry! Keep guessing or ask for a hint. ";
               gameCount++;
           } else if (gameCount >= 2 && choice == "hint" && location.length == 0 && hint == 0) {
               text = "I guess you deserve a hint when you're up against a pro like me. I'll tell you that the first letter of my hiding spot is " 
@@ -290,9 +293,9 @@ restService.post('/reply', function(req, res) {
               gameCount = 0;
               hint = 0;
           } else if (gameCount == 1) {
-              text = "You have to guess first, buddy!";
+              text = "You have to guess first, buddy! Or you can give up if I'm doing too well. ";
           } else if (gameCount > 1) {
-              text = "Guess again first!";
+              text = "Guess again first or give up!";
           } 
           break;
         }
