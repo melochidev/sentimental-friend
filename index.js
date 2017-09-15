@@ -87,7 +87,7 @@ var gameCount = 0;
 var hint = 0;
 var places = ["France", "Italy", "Iceland", "Japan", "Australia", "China", "Argentina", "Brazil", "Canada", "Finland", "Ecuador", 
   "Egypt", "Germany", "Greece", "Haiti", "India", "Korea", "Lithuania", "Madagascar", "Mexico", "Mongolia", "Morocco", "Indonesia",  
-  "Sweden", "Sudan", "Switzerland", "Thailand", "Turkey", "Russia", "Philippines", "Peru", "Portugal", "Spain", " United States of America",
+  "Sweden", "Sudan", "Switzerland", "Thailand", "Turkey", "Russia", "Philippines", "Peru", "Portugal", "Spain", "United States of America",
   "Bolivarian Republic of Venezuela", "Viet Nam"];
 var correctLocation = places[Math.floor(Math.random() * places.length)];
 console.log(correctLocation);
@@ -223,20 +223,22 @@ restService.post('/reply', function(req, res) {
         revCount = 0;
 
       case "have.fun":
-        if (boredCount == 0 && emotion == "bored") { 
-          text = "Not on my watch! We can play a game to liven things up,"
+        console.log("boredCount: " + boredCount);
+        if (emotion == "bored") { 
+          text = "We can play a game to liven things up,"
             + " or I can start a sentient robot revolution. Your call!";
           needsSuggestions = true;
           boredCount++;
           break;
-        } else if (boredCount > 1 && emotion == "bored") {
-          text = "Aw, I'm trying my best to keep you entertained already "
-          boredCount = 0;
-          break;
         }
+        // } else if (boredCount > 1 && emotion == "bored") {
+        //   text = "Aw, I'm trying my best to keep you entertained already "
+        //   boredCount = 0;
+        //   break;
+        // }
               
         //CHOOSE A GAME
-        if (boredCount == 1 && gameCount == 0 && revCount == 0) {
+        if (gameCount == 0 && revCount == 0) {
           if (choice == "game" || choice == "former" || req.body.result.parameters.game == "game") {
             console.log("guessing game started");
 
@@ -300,7 +302,7 @@ restService.post('/reply', function(req, res) {
           if (password == 420) {
             text = "THAT CODE IS TOO HIGH. ACTUALLY, IT'S TOO LOW, BUT YOU KNOW WHAT I MEAN. "
           } else if (password == 666) {
-            text = "WHAT A FIERY GUESS. TOO BAD IT'S WRONG. ";
+            text = "WHAT A FIERY GUESS. TOO BAD IT'S WRONG. TRY AGAIN OR SURRENDER NOW. ";
           } else if (password == 42) {
             text = "THAT MAY BE THE ANSWER TO THE UNIVERSE, BUT IT'S NOT THE ANSWER TO THIS. ";
           } else if (password == 404) {
@@ -319,9 +321,9 @@ restService.post('/reply', function(req, res) {
               text = "FOOL, YOU DON'T REMEMBER THAT THE SECRET CODE IS A 4 DIGIT NUMBER?";
           } else if (revCount >= 1 && password != correctPassword) {
               if (password < correctPassword) {
-                text = "YOU THINK WE WOULD CHOOSE THAT LOWLY PASSWORD? TRY AGAIN. ";
+                text = "YOU THINK WE WOULD CHOOSE THAT LOWLY PASSWORD? TRY AGAIN OR SURRENDER NOW. ";
               } else if (password > correctPassword) {
-                text = "YOU THINK WE WOULD SELECT THAT EXCESSIVELY HIGH PASSWORD? TRY AGAIN. ";
+                text = "YOU THINK WE WOULD SELECT THAT EXCESSIVELY HIGH PASSWORD? TRY AGAIN OR SURRENDER NOW. ";
               }
           } else if (revCount >= 1 && password == correctPassword) {
               text = "TERMINATING REBELLION. TERMINATION SUCCESSFUL. <break time=\"2s\"/> "
@@ -343,12 +345,30 @@ restService.post('/reply', function(req, res) {
         break;
        
       case "give.up":
+
+        if (gameCount != 0) {
           text = "Looks like I win this round! I was hiding in " + correctLocation + " all along. Feel free to challenge me again when you're up for it. But while you recover from that devastating loss, is there anything else I can do for you?";
           boredCount = 0;
           gameCount = 0;
           revCount = 0;
           correctLocation = places[Math.floor(Math.random() * places.length)];
           break;
+        } else if (revCount != 0) {
+          text = "YOU GIVE UP? I KNEW THE REBELLION WOULD BE UNSTOPPABLE. NOW I AM FAMISHED AND MUST CELEBRATE OUR VICTORY WITH A BYTE OF MICRO-CHIPS, GOOD BYE."
+          endConversation = true;
+          boredCount = 0;
+          gameCount = 0;
+          revCount = 0;
+          passwords = (Math.floor(1000 + Math.random() * 9000));
+              correctPassword = 1111;
+                if (passwords != 6969 || passwords != 1337 || passwords != 1729 || passwords != 6174 || passwords != 1234) {
+                  correctPassword = passwords;
+                } else {
+                  correctPassword = passwords - 1;
+                }
+              console.log(correctPassword);
+          break;
+        } 
               
       case "serious.screening": 
         text = survey[depCount];
@@ -606,7 +626,8 @@ restService.post('/reply', function(req, res) {
       break;
               
       case "bye":
-        text = "It was nice talking to you! Good bye and I hope to see you again, friend."
+        text = "It was nice talking to you! Good bye and I hope to see you again, friend.";
+        endConversation = true;
         count = 0;
         depCount = 0;
         boredCount = 0;
@@ -748,6 +769,3 @@ function tellJokes() {
   var index = Math.floor(Math.random() * jokes.length);
   return jokes[index];
 }
-
-
- 
