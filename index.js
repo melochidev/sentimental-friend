@@ -1,22 +1,26 @@
 'use strict';
 
+/*DEPENDENCIES*/
 const express = require('express');
 const bodyParser = require('body-parser');
 
+//For Firebase authentication
 const admin = require("firebase-admin");
 const serviceAccount = require("./emotional-response-firebase-adminsdk-hjacm-1e48785bda.json");
-
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
     databaseURL: "https://emotional-response.firebaseio.com/"
 });
 
+/*VARIABLES*/
+//audio files for relaxation response
 var fourSeconds = '<audio src="https://firebasestorage.googleapis.com/v0/b/emotional-response.appspot.com/o/4sec_relax.ogg?alt=media&amp;token=f9b14a81-b53b-45d5-b184-c98047fbeb97"></audio>';
 var sevenSeconds = ' <audio src="https://firebasestorage.googleapis.com/v0/b/emotional-response.appspot.com/o/7sec_relax.ogg?alt=media&amp;token=1f999c46-ba8c-4495-9b01-dc1e51c2493b"></audio> ';
 var eightSeconds = ' <audio src="https://firebasestorage.googleapis.com/v0/b/emotional-response.appspot.com/o/8sec_relax.ogg?alt=media&amp;token=e51490cd-446e-4c4f-8f3c-b60db302829f"></audio> ';
 
-var count = 0;
-var depressed = false;
+var count = 0; //
+var depressed = false; //boolean value for routing to depression screening
+//array for depression screening survey; helping to cope with problems
 var survey = [
     "You must be experiencing tough times right now. I want to try to help. Is that okay with you? (Yes or no?)",
     "All right, just answer my questions with a simple yes or no response... <break time=\"1s\"/> are you under a lot of stress right now?",
@@ -26,22 +30,22 @@ var survey = [
     "Are you feeling lonely?",
     "Do you often think negative things about yourself?"
 ];
-var depression = [];
-var depCount = 0;
-var stressed = false;
+var depCount = 0; //counting variable for iterating through survey in serious.screening case
+var stressed = false; //boolean value for routing to relaxation response
 
-var madCount = 0;
+var madCount = 0; //counting variable for calm.down case
 // var issues = [
 //     "Let me see... <break time=\"1s\"/> are you mad at someone else?",
 //     "Do you feel mad at yourself?",
 //     "Did something go wrong that was out of your control?"
 // ];
-var lonelyCount = 0;
+var lonelyCount = 0; //counting variable for lonely case
 
-var jokes = [];
+var jokes = []; //empty array for jokes; to be initalized from Firebase in getJokes() method
 
 var affirmations = ["Okay", "Sure", "No problem", "You got it", "I can do that", "Absolutely", "Sure thing", "All right"];
 
+//retrieves jokes from database in Firebase and pushes each string into the jokes array
 function getJokes() {
     var ref = admin.database().ref("/").child('jokes');
     var afterJokes = ref.once('value').then(function(snapshot) {
@@ -55,6 +59,7 @@ function getJokes() {
     return afterJokes;
 }
 
+//array for random access to good deed suggestions
 var goodDeeds = [
     "turn off the lights when you're not using them to conserve energy.",
     "pay for a stranger's meal the next time you go out.",
@@ -72,8 +77,8 @@ var goodDeeds = [
     "buy a gift for your mom or grandmother; they deserve one.",
     "buy flowers for a loved one. Random acts of love go a long way!"
 ];
-var boredCount = 0;
-var revCount = 0;
+var boredCount = 0; //counting variable for have.fun case
+var revCount = 0; //counting variable for revolution game option
 var passwords = (Math.floor(1000 + Math.random() * 9000));
 var correctPassword = 1111;
 if (passwords != 6969 || passwords != 1337 || passwords != 1729 || passwords != 6174 || passwords != 1234) {
@@ -83,8 +88,9 @@ if (passwords != 6969 || passwords != 1337 || passwords != 1729 || passwords != 
 }
 console.log(correctPassword);
 
-var gameCount = 0;
-var hint = 0;
+var gameCount = 0; //counting variable for location game option
+var hint = 0; //counting variable for hints
+//array for random access of location answers in the location game
 var places = ["France", "Italy", "Iceland", "Japan", "Australia", "China", "Argentina", "Brazil", "Canada", "Finland", "Ecuador",
     "Egypt", "Germany", "Greece", "Haiti", "India", "Korea", "Lithuania", "Madagascar", "Mexico", "Mongolia", "Morocco", "Indonesia",
     "Sweden", "Sudan", "Switzerland", "Thailand", "Turkey", "Russia", "Philippines", "Peru", "Portugal", "Spain", "United States of America",
@@ -93,19 +99,21 @@ var places = ["France", "Italy", "Iceland", "Japan", "Australia", "China", "Arge
 var correctLocation = places[Math.floor(Math.random() * places.length)];
 console.log(correctLocation);
 
-var previousAction = "none";
+var previousAction = "none"; //variable for keeping track of the previous action; allows for context
 
+//store jokes in the array, then initalize all webhook values
 getJokes().then(function(returnVal) {
+    //set the jokes array to the result of getJokes()
     jokes = returnVal;
 
+    //express app declaration, more dependencies
     const restService = express();
-
     restService.use(bodyParser.urlencoded({
         extended: true
     }));
-
     restService.use(bodyParser.json());
 
+    //POST request information; determining SF response based on user input
     restService.post('/reply', function(req, res) {
         var action = req.body.result.action;
         var emotion = req.body.result.parameters.emotion;
@@ -119,7 +127,6 @@ getJokes().then(function(returnVal) {
         var endConversation = false;
         var needsSuggestions = false;
 
-        //console.log("calling webhook.");
         //ROUTING OF ACTIONS
         if (action == "recieve.emotion") {
             console.log(action);
@@ -160,7 +167,7 @@ getJokes().then(function(returnVal) {
             console.log(action);
         }
 
-        //console.log(req.body.result.parameters.repeat);
+        //repeating previous action based on context
         if (req.body.result.parameters.repeat == "repeat") {
             console.log("repeating");
             if (previousAction == "stay.happy" || previousAction == "do.good") {
@@ -199,12 +206,14 @@ getJokes().then(function(returnVal) {
         }
 
         ////////////////////////// Giant switch statement for handling all emotions and actions //////////////////////////////////
+        /*
+        * General structure for each case:
+        * Based on the user input, set the text variable to an appropriate response.
+        * If the text response is too long, set tooLong variable to false and initialize shortText to a summarized version of text.
+        * If the response does not prompt for any user feedback/replies, set endConversation to true.
+        */
         console.log(action);
         switch (action) {
-            // case "input.welcome":
-            //   needsSuggestions = true;
-            //   break;
-
             case "stay.happy":
                 text = "I'm glad you're feeling good! Let's channel these positive vibes and make the world a little better. " +
                     "Try and ";
@@ -656,6 +665,7 @@ getJokes().then(function(returnVal) {
         console.log(text);
         console.log("\n");
 
+        //RETURNING RESPONSE based on action
         if (endConversation) {
             return res.json({
                 speech: '<speak> ' + text + ' </speak>',
@@ -682,14 +692,21 @@ getJokes().then(function(returnVal) {
             });
         }
     });
-
+    
+    //setting up server on port 8080
     restService.listen((process.env.PORT || 8080), function() {
         console.log("Server up and running");
     });
 
 });
 
+////////SUPPORTING FUNCTIONS////////////
 
+/*
+* Replaces the SSML tags for <break time="Xs"/> with empty spaces; add readability to text and hide code from the user.
+* @param text: text that needs to be edited
+* @return display: text with <break> statements removed
+*/
 function replaceBreaks(text) {
     var display = text;
     if (text.includes("<break")) {
@@ -703,6 +720,9 @@ function replaceBreaks(text) {
     return display;
 }
 
+/*
+* Refactoring of text/audio for all responses to stress.
+*/
 function relax() {
     var audio = ' <break time="1s"/> First, sit up with your back straight. <break time="2s"/> Now, close your eyes and relax your shoulders.' +
         ' <break time="1s"/> Take a slow, deep breath in through your nose. <break time ="3s"/> Hold it... <break time="3s"/> And then slowly exhale through your mouth.' +
@@ -713,6 +733,9 @@ function relax() {
     return audio;
 }
 
+/*
+* Refactoring of text/audio for all responses to stress the second time or more.
+*/
 function relaxRepeat() {
     var audio = ' <break time="1s"/> Inhale through your nose. <break time ="3s"/> Hold it... <break time="3s"/> Exhale through your mouth.' +
         ' <break time="3s"/> Inhale. <break time ="4s"/> Hold it... <break time="4s"/> Exhale.' +
@@ -723,6 +746,9 @@ function relaxRepeat() {
     return audio;
 }
 
+/*
+* Refactoring of text/audio for all responses to tiredness.
+*/
 function sleepBreathe() {
     var warning = 'But if you don\'t feel comfortable with these exact instructions, no problem! Just do what is comfortable for you. <break time="1s"/> '
     var start = 'Now start by placing the tip of your tongue on the roof of your mouth, right behind your front teeth. <break time="1s"/> '
@@ -739,6 +765,9 @@ function sleepBreathe() {
     return total;
 }
 
+/*
+* Refactoring of text/audio for all responses to tiredness for the second time or more.
+*/
 function sleepBreatheRepeat() {
     var steps = 'Inhale through your nose. ' +
         fourSeconds +
@@ -765,16 +794,21 @@ function sleepBreatheRepeat() {
         'Exhale. ' +
         eightSeconds +
         ' Say "repeat" to continue or "no thanks" to stop.';
-
     return steps;
 }
 
+/*
+* Refactoring of text for responses to happy -- randomly selects a good deed for the user.
+*/
 function doGood() {
     var index = Math.floor(Math.random() * goodDeeds.length);
     return goodDeeds[index];
     //+ " If you don't feel like it, just say 'no thanks' or 'another one' to try again!";
 }
 
+/*
+* Refactoring of text for responses to sad -- randomly selects a a joke for the user.
+*/
 function tellJokes() {
     var index = Math.floor(Math.random() * jokes.length);
     return jokes[index];
